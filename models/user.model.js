@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     birthDate: {
         type: String,
-        default: "00/00/0000",
+        default: "0000/00/00",
     },
     emailId: {
         type: String,
@@ -24,6 +24,12 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     password: {
+        type: String
+    },
+    accessToken: {
+        type: String,
+    },
+    refreshToken: {
         type: String
     },
     role: {
