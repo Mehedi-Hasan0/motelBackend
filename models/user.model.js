@@ -34,8 +34,83 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "user",
+        default: "visitors",
     },
+    profileDetails: {
+        profileType: {
+            type: String,
+            default: "visitors"
+        },
+        profile: {
+            school: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            profession: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            address: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            favoriteSong: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            obsessedWith: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            funFact: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            spendTime: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            },
+            pets: {
+                name: {
+                    type: String
+                },
+                value: {
+                    type: String
+                }
+            }
+        },
+        about: {
+            type: String
+        },
+    }
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
 
 const User = mongoose.model("User", userSchema, "users");

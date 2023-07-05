@@ -8,7 +8,6 @@ const saltRounds = 10
 exports.signUp = async (req, res, next) => {
     try {
         const payload = req.body;
-        console.log(payload)
         if (!payload.name) {
             throw new Error("Please provide user name");
         }
@@ -32,15 +31,40 @@ exports.signUp = async (req, res, next) => {
         }
 
         const user = await User(userObj).save();
+        const findCriteria = {
+            emailId: payload.emailId
+        }
+        const userDetails = await User.find(findCriteria);
+
+        const accessToken = jwt.sign(
+            {
+                _id: userDetails[0]._id,
+                role: userDetails[0].role
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "30m" }
+        )
+        const refreshToken = jwt.sign({ _id: userDetails[0]._id, role: userDetails[0].role }, process.env.REFRESH_TOKEN_SECRET)
+
+        const updatedUser = await User.findOneAndUpdate(findCriteria, { accessToken: accessToken, refreshToken: refreshToken }, { new: true })
+
         let response = {
-            info: "User created successfully",
+            info: "Welcome to motel",
             success: 1,
-            status: 201
+            status: 200,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            user_details: updatedUser
         };
-        res.status(201).json(response);
+        res.status(200).json(response);
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: "Failed to create user" });
+        let response = {
+            info: "Failed to create user",
+            success: 0,
+            status: 500
+        }
+        res.status(500).json({ response });
     }
 };
 
@@ -70,14 +94,19 @@ exports.logIn = async (req, res) => {
             const updatedUser = await User.findOneAndUpdate(findCriteria, { accessToken: accessToken, refreshToken: refreshToken }, { new: true })
             let response = {
                 info: "Successfully logged in",
-                status: 201,
+                success: 1,
+                status: 200,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
                 user_details: updatedUser
             }
             res.send(response);
         } else if (!isMatched) {
-            res.send("Incorrect Password")
+            let response = {
+                info: "Incorrect Password",
+                success: 0
+            }
+            res.send(response)
         } else {
             res.send("Not allowed!")
         }
@@ -94,45 +123,85 @@ exports.postUser = async (req, res) => {
 
 exports.refreshToken = async (req, res) => {
     const refreshToken = req.body.refreshToken;
+    console.log(refreshToken)
 
     if (!refreshToken) {
-        return res.send("Please Log in");
-    }
-
-    try {
-        let decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-        const userId = decoded._id;
-        const findCriteria = {
-            _id: new mongoose.Types.ObjectId(userId)
-        };
-        const userDetails = await User.findById(findCriteria);
-        console.log(userDetails)
-        if (userDetails.refreshToken !== refreshToken) {
-            return res.sendStatus(403);
-        }
-
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, user) => {
-            if (error) {
-                return res.sendStatus(401);
+        return res.sendStatus(404).send("Please Log in");
+    } else {
+        try {
+            let decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            const userId = decoded._id;
+            const findCriteria = {
+                _id: new mongoose.Types.ObjectId(userId)
+            };
+            const userDetails = await User.findById(findCriteria);
+            console.log(userDetails.refreshToken, userDetails, "LINE 138")
+            if (userDetails.refreshToken !== refreshToken) {
+                return res.sendStatus(403);
             }
 
-            const accessToken = jwt.sign(
-                {
-                    _id: userDetails._id,
-                    role: userDetails.role
-                },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: "30m" }
-            );
-            console.log(accessToken, "AccessToken")
+            jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, user) => {
+                if (error) {
+                    return res.sendStatus(401);
+                }
 
-            res.json({ accessToken: accessToken });
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(401).send("Invalid refresh token");
+                const accessToken = jwt.sign(
+                    {
+                        _id: userDetails._id,
+                        role: userDetails.role
+                    },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: "30m" }
+                );
+                console.log(accessToken, "AccessToken")
+
+                res.json({ accessToken: accessToken });
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(401).send("Invalid refresh token");
+        }
     }
 };
+
+exports.logOut = async (req, res) => {
+    const userId = req.user;
+    try {
+        const userDetails = await User.updateOne(
+            { _id: userId },
+            {
+                $unset: {
+                    accessToken: '',
+                    refreshToken: '',
+                }
+            }
+        )
+        res.send("User logout")
+    } catch (error) {
+        console.log(error, "Logout error")
+    }
+}
+
+exports.getUserDetails = async (req, res) => {
+    try {
+        const userId = req.user
+        const findCriteria = {
+            _id: new mongoose.Types.ObjectId(userId)
+        }
+
+        const userDetails = await User.findById(findCriteria);
+
+        let response = {
+            info: "user exists",
+            status: 200,
+            success: 1,
+            user_details: userDetails
+        }
+        res.send(response)
+    } catch (error) {
+        console.log(error, "LINE 202")
+    }
+}
 
 exports.checkEmail = async (req, res) => {
     try {
@@ -142,6 +211,7 @@ exports.checkEmail = async (req, res) => {
             emailId: payload.email
         }
         const isEmailExist = await User.find(findCriteria);
+        console.log(isEmailExist)
         let response;
         if (isEmailExist.length !== 0) {
             response = {
@@ -162,4 +232,8 @@ exports.checkEmail = async (req, res) => {
         console.log(error)
         res.status(500).send("Failed to search")
     }
+}
+
+exports.userProfileDetails = async (req, res) => {
+    const userId = req.user
 }
