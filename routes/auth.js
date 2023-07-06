@@ -1,5 +1,5 @@
 const express = require("express");
-const { signUp, checkEmail, logIn, refreshToken, postUser, logOut, getUserDetails, userProfileDetails } = require("../controllers/authController");
+const { signUp, checkEmail, logIn, refreshToken, postUser, logOut, getUserDetails, userProfileDetails, userProfileAbout } = require("../controllers/authController");
 const { verifyJwtToken } = require("../middleware/jwt");
 const router = express.Router();
 
@@ -13,5 +13,6 @@ router.post("/post", verifyJwtToken, postUser)
 router.post("/refresh_token", refreshToken)
 router.post("/check_email", checkEmail)
 router.post("/profile_details", verifyJwtToken, userProfileDetails)
+router.post("/profile_details_about", verifyJwtToken, userProfileAbout)
 
 module.exports = router;

@@ -236,4 +236,78 @@ exports.checkEmail = async (req, res) => {
 
 exports.userProfileDetails = async (req, res) => {
     const userId = req.user
+    const payload = req.body
+    const { valueName: [profileDetailsName], value: [profileDetailsvalue], fieldName } = payload
+    const findCriteria = {
+        _id: new mongoose.Types.ObjectId(userId)
+    }
+
+    console.log(profileDetailsName, profileDetailsvalue, fieldName, payload)
+
+    try {
+        const userDetails = await User.findById(findCriteria).limit(1);
+
+        const userProfile = userDetails.profileDetails.profile;
+
+        if (typeof userProfile === "object") {
+            if (fieldName in userProfile) {
+                // Update the value of the field
+                userProfile[fieldName].name = profileDetailsName;
+                userProfile[fieldName].value = profileDetailsvalue;
+
+                // Save the updated user details
+                await userDetails.save();
+
+                // console.log("Field updated successfully");
+            } else {
+                console.log("Field not found");
+            }
+        } else {
+            console.log("userProfile is not an object");
+        }
+
+        // Send a response indicating success
+        res.status(200).json({ message: "Added successfully" });
+    } catch (error) {
+        // Handle any errors that occurred during the update process
+        console.error("Error updating field:", error);
+        res.status(404).json({ error: "An error occurred while updating the field" });
+    }
+}
+
+exports.userProfileAbout = async (req, res) => {
+    try {
+        const userId = req.user
+        const payload = req.body
+        const { profileDetailsAbout, fieldName } = payload
+        const findCriteria = {
+            _id: new mongoose.Types.ObjectId(userId)
+        }
+
+        const userDetails = await User.findById(findCriteria).limit(1);
+
+        const userProfile = userDetails.profileDetails;
+
+        if (typeof userProfile === "object") {
+            if (fieldName in userProfile) {
+                // Update the value of the field
+                userProfile[fieldName] = profileDetailsAbout;
+
+                // Save the updated user details
+                await userDetails.save();
+
+                console.log("Field updated successfully");
+            } else {
+                console.log("Field not found");
+            }
+        } else {
+            console.log("userProfile is not an object");
+        }
+
+        // Send a response indicating success
+        res.status(200).json({ message: "Added successfully" });
+    } catch (error) {
+        console.error("Error updating field:", error);
+        res.status(404).json({ error: "An error occurred while updating the field" });
+    }
 }
