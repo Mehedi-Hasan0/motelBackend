@@ -311,3 +311,22 @@ exports.userProfileAbout = async (req, res) => {
         res.status(404).json({ error: "An error occurred while updating the field" });
     }
 }
+
+exports.uploadProfileImage = async (req, res) => {
+    try {
+        const profileImg = req.body.profileImg;
+        const userId = req.user;
+        const findCriteria = {
+            _id: new mongoose.Types.ObjectId(userId)
+        }
+        const userDetails = await User.findOneAndUpdate(findCriteria, { profileImg: profileImg }, { new: true });
+
+        let response = {
+            info: "Successfully uploded",
+            profileImg: userDetails.profileImg
+        }
+        res.status(200).send(response)
+    } catch (error) {
+        console.log(error)
+    }
+}

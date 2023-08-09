@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "visitors",
     },
+    profileImg: {
+        type: String
+    },
     profileDetails: {
         profileType: {
             type: String,
