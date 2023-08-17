@@ -3,7 +3,10 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose")
+
 const saltRounds = 10
+const daysToSeconds = 1 * 60 * 60; //   days * hours *  minutes *  seconds
+const expirationTimeInSeconds = Math.floor(Date.now() / 1000) + daysToSeconds;
 
 exports.signUp = async (req, res, next) => {
     try {
@@ -42,7 +45,7 @@ exports.signUp = async (req, res, next) => {
                 role: userDetails[0].role
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "30m" }
+            { expiresIn: expirationTimeInSeconds }
         )
         const refreshToken = jwt.sign({ _id: userDetails[0]._id, role: userDetails[0].role }, process.env.REFRESH_TOKEN_SECRET)
 
@@ -87,7 +90,7 @@ exports.logIn = async (req, res) => {
                     role: userDetails[0].role
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: "30m" }
+                { expiresIn: expirationTimeInSeconds }
             )
             const refreshToken = jwt.sign({ _id: userDetails[0]._id, role: userDetails[0].role }, process.env.REFRESH_TOKEN_SECRET)
 
@@ -151,7 +154,7 @@ exports.refreshToken = async (req, res) => {
                         role: userDetails.role
                     },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: "30m" }
+                    { expiresIn: expirationTimeInSeconds }
                 );
                 console.log(accessToken, "AccessToken")
 
