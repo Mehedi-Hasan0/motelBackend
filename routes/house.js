@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.use(express.json())
 
-router.post("/house_structure", verifyJwtToken, createNewHouse)
+router.post("/create_a_new_house", verifyJwtToken, createNewHouse)
+
+module.exports = router

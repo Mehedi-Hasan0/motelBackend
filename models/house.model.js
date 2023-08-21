@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 
 const houseSchema = new mongoose.Schema({
+    author: {
+        type: String
+    },
+    status: {
+        type: String,
+        default: "In progress"
+    },
     houseType: {
         type: String,
     },
@@ -43,6 +50,9 @@ const houseSchema = new mongoose.Schema({
 
     },
     amenities: {
+        type: Array
+    },
+    photos: {
         type: Array
     }
 

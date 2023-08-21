@@ -4,6 +4,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 
 const auth = require("./routes/auth")
+const house = require("./routes/house")
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Use routes
 app.use("/auth", auth);
+app.use("/house", house);
 
 const port = 5000;
 

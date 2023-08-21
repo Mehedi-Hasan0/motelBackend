@@ -2,7 +2,8 @@ require("dotenv").config();
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const House = require("../models/house.model");
 
 const saltRounds = 10
 const daysToSeconds = 1 * 60 * 60; //   days * hours *  minutes *  seconds
@@ -327,6 +328,35 @@ exports.uploadProfileImage = async (req, res) => {
         let response = {
             info: "Successfully uploded",
             profileImg: userDetails.profileImg
+        }
+        res.status(200).send(response)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.userToHost = async (req, res) => {
+    try {
+        const userId = req.user;
+        const role = req.body.role
+        const findCriteria = {
+            _id: new mongoose.Types.ObjectId(userId)
+        }
+        const updatedUserDetails = await User.findOneAndUpdate(findCriteria, { role: role }, { new: true })
+
+        const id = {
+            author: updatedUserDetails._id
+        }
+
+        const updateNewHouseAuthor = await House(id).save()
+
+        console.log(updateNewHouseAuthor)
+
+
+        const response = {
+            updatedUserDetails,
+            info: "User role updated",
+            succeed: 1
         }
         res.status(200).send(response)
     } catch (error) {
