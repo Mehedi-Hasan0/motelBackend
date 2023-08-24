@@ -8,7 +8,7 @@ exports.saveHouseStructure = async (req, res) => {
         const payload = req.body;
         const houseId = payload.houseId;
         const housetype = payload.houseType;
-        console.log(payload, "Line 5")
+        // console.log(payload, "Line 5")
         const findCriteria = {
             _id: new mongoose.Types.ObjectId(userId)
         }
@@ -52,7 +52,7 @@ exports.savePrivacyType = async (req, res) => {
         const houseId = payload.houseId;
         const privacytype = payload.privacyType;
 
-        console.log(payload, "line 55")
+        // console.log(payload, "line 55")
 
         const findHouseCriteria = {
             _id: new mongoose.Types.ObjectId(houseId)
@@ -74,6 +74,110 @@ exports.savePrivacyType = async (req, res) => {
 
             res.status(200).send(response)
         }
+    } catch (error) {
+        console.log(error)
+    }
+}
+exports.saveLocation = async (req, res) => {
+    try {
+        const payload = req.body;
+        const houseId = payload.houseId;
+        const locationData = payload.location;
+
+        // console.log(payload, "location payload")
+
+        const findHouseCriteria = {
+            _id: new mongoose.Types.ObjectId(houseId)
+        }
+
+        const updateCriteria = {
+            location: locationData
+        }
+
+        if (locationData !== undefined) {
+            const houseDetails = await House.findOneAndUpdate(findHouseCriteria, updateCriteria, { new: true })
+
+            let response = {
+                status: 200,
+                succeed: 1,
+                info: "Successfully housedata updated",
+                houseDetails
+            }
+
+            res.status(200).send(response)
+
+            // console.log(houseDetails, "Line 98")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.saveFloorPlan = async (req, res) => {
+    try {
+        const payload = req.body;
+        const houseId = payload.houseId;
+        const floorplanData = payload.floorPlan;
+
+        // console.log(payload, "line 121")
+
+        const findHouseCriteria = {
+            _id: new mongoose.Types.ObjectId(houseId)
+        }
+
+        const updateCriteria = {
+            floorPlan: floorplanData
+        }
+
+        if (floorplanData !== undefined) {
+            const houseDetails = await House.findOneAndUpdate(findHouseCriteria, updateCriteria, { new: true })
+
+            let response = {
+                status: 200,
+                succeed: 1,
+                info: "Successfully housedata updated",
+                houseDetails
+            }
+
+            res.status(200).send(response)
+
+            // console.log(houseDetails, "line 134")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.saveAmenities = async (req, res) => {
+    try {
+        const payload = req.body;
+        const houseId = payload.houseId;
+        const amenitiesData = payload.amenities;
+
+        const findHouseCriteria = {
+            _id: new mongoose.Types.ObjectId(houseId)
+        }
+
+        const updateCriteria = {
+            amenities: amenitiesData
+        }
+
+        if (amenitiesData !== undefined) {
+            const houseDetails = await House.findOneAndUpdate(findHouseCriteria, updateCriteria, { new: true })
+
+            let response = {
+                status: 200,
+                succeed: 1,
+                info: "Successfully housedata updated",
+                houseDetails
+            }
+
+            res.status(200).send(response)
+
+            console.log(houseDetails, "line 177")
+
+        }
+
     } catch (error) {
         console.log(error)
     }

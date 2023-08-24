@@ -16,7 +16,7 @@ const houseSchema = new mongoose.Schema({
     },
     location: {
         country: {
-            type: String
+            type: {}
         },
         addressLineOne: {
             type: String
@@ -44,7 +44,7 @@ const houseSchema = new mongoose.Schema({
         beds: {
             type: Number
         },
-        bathrooms: {
+        bathroomsNumber: {
             type: Number
         }
 
