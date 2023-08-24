@@ -195,11 +195,14 @@ exports.getUserDetails = async (req, res) => {
 
         const userDetails = await User.findById(findCriteria);
 
+        const housesData = await House.find({ author: userId })
+
         let response = {
             info: "user exists",
             status: 200,
             success: 1,
-            user_details: userDetails
+            user_details: userDetails,
+            house_data: housesData
         }
         res.send(response)
     } catch (error) {
@@ -354,6 +357,7 @@ exports.userToHost = async (req, res) => {
 
 
         const response = {
+            house: updateNewHouseAuthor,
             updatedUserDetails,
             info: "User role updated",
             succeed: 1
