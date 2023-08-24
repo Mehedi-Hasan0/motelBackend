@@ -44,3 +44,37 @@ exports.saveHouseStructure = async (req, res) => {
     }
 
 }
+
+exports.savePrivacyType = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const payload = req.body;
+        const houseId = payload.houseId;
+        const privacytype = payload.privacyType;
+
+        console.log(payload, "line 55")
+
+        const findHouseCriteria = {
+            _id: new mongoose.Types.ObjectId(houseId)
+        }
+
+        const updateCriteria = {
+            privacyType: privacytype
+        }
+
+        if (privacytype !== undefined) {
+            const houseDetails = await House.findOneAndUpdate(findHouseCriteria, updateCriteria, { new: true })
+
+            let response = {
+                status: 200,
+                succeed: 1,
+                info: "Successfully housedata updated",
+                houseDetails
+            }
+
+            res.status(200).send(response)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
