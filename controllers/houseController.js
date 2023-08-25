@@ -189,7 +189,7 @@ exports.savePhotos = async (req, res) => {
         const houseId = payload.houseId;
         const photos = payload.photos;
 
-        console.log(payload)
+        // console.log(payload)
 
         const findCriteria = {
             _id: new mongoose.Types.ObjectId(houseId)
@@ -210,7 +210,42 @@ exports.savePhotos = async (req, res) => {
 
         res.status(200).send(response)
 
-        console.log(houseDetails, "line 211")
+        // console.log(houseDetails, "line 211")
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+exports.saveTitle = async (req, res) => {
+    try {
+        const payload = req.body;
+        const houseId = payload.houseId;
+        const title = payload.title;
+
+        console.log(payload)
+
+        const findCriteria = {
+            _id: new mongoose.Types.ObjectId(houseId)
+        }
+
+        const updateCriteria = {
+            title: title
+        }
+
+        const houseDetails = await House.findOneAndUpdate(findCriteria, updateCriteria, { new: true })
+
+        let response = {
+            status: 200,
+            succeed: 1,
+            info: "Successfully housedata updated",
+            houseDetails
+        }
+
+        res.status(200).send(response)
+
+        console.log(houseDetails, "line 248")
 
     } catch (error) {
         console.log(error)

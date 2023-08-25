@@ -54,6 +54,9 @@ const houseSchema = new mongoose.Schema({
     },
     photos: {
         type: Array
+    },
+    title: {
+        type: String
     }
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
