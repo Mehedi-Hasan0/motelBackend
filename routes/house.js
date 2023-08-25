@@ -1,5 +1,5 @@
 const express = require("express");
-const { saveHouseStructure, savePrivacyType, saveLocation, saveFloorPlan, saveAmenities } = require("../controllers/houseController");
+const { saveHouseStructure, savePrivacyType, saveLocation, saveFloorPlan, saveAmenities, savePhotos } = require("../controllers/houseController");
 const { verifyJwtToken } = require("../middleware/jwt");
 const router = express.Router();
 
@@ -10,5 +10,6 @@ router.post("/save_privacy_type", verifyJwtToken, savePrivacyType)
 router.post("/save_house_location", verifyJwtToken, saveLocation)
 router.post("/save_floor_plan", verifyJwtToken, saveFloorPlan)
 router.post("/save_amenities", verifyJwtToken, saveAmenities)
+router.post("/save_photos", verifyJwtToken, savePhotos)
 
 module.exports = router
