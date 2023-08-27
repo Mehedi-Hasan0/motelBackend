@@ -57,7 +57,19 @@ const houseSchema = new mongoose.Schema({
     },
     title: {
         type: String
-    }
+    },
+    highlight: {
+        type: Array
+    },
+    description: {
+        type: String
+    },
+    visibility: {
+        type: String
+    },
+    guestType: {
+        type: String
+    },
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
 
