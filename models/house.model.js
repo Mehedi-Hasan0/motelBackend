@@ -70,6 +70,19 @@ const houseSchema = new mongoose.Schema({
     guestType: {
         type: String
     },
+    priceBeforeTaxes: {
+        type: Number
+    },
+    authorEarnedPrice: {
+        type: Number
+    },
+    basePrice: {
+        type: Number
+    },
+    security: {
+        type: Array
+    },
+
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
 
