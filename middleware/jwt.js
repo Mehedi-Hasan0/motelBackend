@@ -4,14 +4,14 @@ const jwt = require("jsonwebtoken");
 exports.verifyJwtToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader ? authHeader.split(' ')[1] : null;
-    console.log(token, "LINE 7 JWT");
+    // console.log(token, "LINE 7 JWT");
 
     if (!token) {
         return res.send("token is not valid");
     }
     try {
         let decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        console.log(decoded);
+        // console.log(decoded);
         req.user = decoded._id;
         next();
     } catch (error) {

@@ -488,3 +488,27 @@ exports.publishList = async (req, res) => {
     }
 }
 
+exports.getAllListing = async (req, res) => {
+    try {
+        const allListingData = await House.find({});
+        console.log(allListingData.length)
+        let response = {
+            succeed: 1,
+            status: 200,
+            allListingData
+        }
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+exports.getListingDataWithCat = async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
