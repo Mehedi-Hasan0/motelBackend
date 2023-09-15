@@ -1,13 +1,14 @@
 const express = require("express");
-const { saveHouseStructure, savePrivacyType, saveLocation, saveFloorPlan, saveAmenities, savePhotos, saveTitle, saveHighlight, saveDescription, saveGuestType, savePrices, saveSecurity, getHouseDetails, publishList, getAllListing, getListingDataWithCat } = require("../controllers/houseController");
+const { saveHouseStructure, savePrivacyType, saveLocation, saveFloorPlan, saveAmenities, savePhotos, saveTitle, saveHighlight, saveDescription, saveGuestType, savePrices, saveSecurity, getHouseDetails, publishList, getAllListing, getListingDataWithCat, getOneListing } = require("../controllers/houseController");
 const { verifyJwtToken } = require("../middleware/jwt");
 const router = express.Router();
 
 router.use(express.json())
 
 router.get("/get_all_listing", getAllListing)
-router.get("/get_listing_with_cat", getListingDataWithCat)
+router.get("/listing/:id", getOneListing)
 
+router.post("/get_listing_with_cat", getListingDataWithCat)
 router.post("/get_house_details", verifyJwtToken, getHouseDetails)
 router.post("/save_structure", verifyJwtToken, saveHouseStructure)
 router.post("/save_privacy_type", verifyJwtToken, savePrivacyType)

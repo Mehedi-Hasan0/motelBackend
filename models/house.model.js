@@ -82,7 +82,10 @@ const houseSchema = new mongoose.Schema({
     security: {
         type: Array
     },
-
+    ratings: {
+        type: Number,
+        default: null
+    }
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
 

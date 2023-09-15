@@ -491,7 +491,7 @@ exports.publishList = async (req, res) => {
 exports.getAllListing = async (req, res) => {
     try {
         const allListingData = await House.find({});
-        console.log(allListingData.length)
+        // console.log(allListingData.length)
         let response = {
             succeed: 1,
             status: 200,
@@ -506,9 +506,48 @@ exports.getAllListing = async (req, res) => {
 
 exports.getListingDataWithCat = async (req, res) => {
     try {
+        const payload = req.body;
+        const category = payload.category;
 
+        const catBasedListing = await House.find({
+            houseType: { $eq: category }
+        });
+
+        const response = {
+            succeed: 1,
+            success: 200,
+            catBasedListing
+        }
+
+        res.status(200).send(response)
     } catch (error) {
         console.log(error)
     }
 }
 
+exports.getOneListing = async (req, res) => {
+    try {
+        const listingId = req.params.id;
+
+        const findCriteria = {
+            _id: new mongoose.Types.ObjectId(listingId)
+        }
+
+        const listingData = await House.findById(findCriteria);
+
+        const findAuthorCriteria = {
+            _id: new mongoose.Types.ObjectId(listingData.author)
+        }
+
+        const authorDetails = await User.findById(findAuthorCriteria)
+
+        let response = {
+            listing: listingData,
+            listingAuthor: authorDetails
+        }
+
+        res.status(200).send(response)
+    } catch (error) {
+        console.log(error)
+    }
+}
