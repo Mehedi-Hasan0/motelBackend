@@ -25,10 +25,10 @@ const houseSchema = new mongoose.Schema({
             type: String
         },
         city: {
-            type: String
+            type: {}
         },
         state: {
-            type: String,
+            type: {},
         },
         postCode: {
             type: String
@@ -70,7 +70,7 @@ const houseSchema = new mongoose.Schema({
     guestType: {
         type: String
     },
-    priceBeforeTaxes: {
+    priceAfterTaxes: {
         type: Number
     },
     authorEarnedPrice: {

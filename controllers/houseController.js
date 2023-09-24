@@ -527,7 +527,10 @@ exports.getListingDataWithCat = async (req, res) => {
 
 exports.getOneListing = async (req, res) => {
     try {
-        const listingId = req.params.id;
+        const payload = req.body;
+        const listingId = payload.id;
+
+        console.log(listingId, "line 532")
 
         const findCriteria = {
             _id: new mongoose.Types.ObjectId(listingId)

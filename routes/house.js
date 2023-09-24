@@ -6,9 +6,10 @@ const router = express.Router();
 router.use(express.json())
 
 router.get("/get_all_listing", getAllListing)
-router.get("/listing/:id", getOneListing)
 
+router.post("/room_details", getOneListing)
 router.post("/get_listing_with_cat", getListingDataWithCat)
+
 router.post("/get_house_details", verifyJwtToken, getHouseDetails)
 router.post("/save_structure", verifyJwtToken, saveHouseStructure)
 router.post("/save_privacy_type", verifyJwtToken, savePrivacyType)

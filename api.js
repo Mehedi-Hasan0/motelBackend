@@ -5,6 +5,7 @@ const cors = require("cors")
 
 const auth = require("./routes/auth")
 const house = require("./routes/house")
+const reservations = require("./routes/reservations")
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // Use routes
 app.use("/auth", auth);
 app.use("/house", house);
+app.use("/reservations", reservations)
 
 const port = 5000;
 
