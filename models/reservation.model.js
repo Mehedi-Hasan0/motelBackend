@@ -27,6 +27,9 @@ const reservationSchema = new mongoose.Schema({
     },
     authorEarnedPrice: {
         type: Number
+    },
+    orderId: {
+        type: Number
     }
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } })

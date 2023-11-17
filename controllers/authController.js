@@ -353,8 +353,7 @@ exports.userToHost = async (req, res) => {
 
         const updateNewHouseAuthor = await House(id).save()
 
-        console.log(updateNewHouseAuthor)
-
+        // console.log(updateNewHouseAuthor)
 
         const response = {
             house: updateNewHouseAuthor,

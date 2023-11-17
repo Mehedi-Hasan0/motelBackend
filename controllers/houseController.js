@@ -447,7 +447,7 @@ exports.getHouseDetails = async (req, res) => {
 
         res.status(200).send(response)
 
-        console.log(houseDetails, "line 447")
+        // console.log(houseDetails, "line 447")
 
     } catch (error) {
         console.log(error)
@@ -490,7 +490,11 @@ exports.publishList = async (req, res) => {
 
 exports.getAllListing = async (req, res) => {
     try {
-        const allListingData = await House.find({});
+        const data = await House.find({});
+
+        const allListingData = data.filter((listing) => {
+            return listing.status === "Complete"
+        })
         // console.log(allListingData.length)
         let response = {
             succeed: 1,

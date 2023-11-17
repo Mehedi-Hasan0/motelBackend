@@ -1,5 +1,5 @@
 const express = require("express");
-const { signUp, checkEmail, logIn, refreshToken, postUser, logOut, getUserDetails, userProfileDetails, userProfileAbout, uploadProfileImage, userToHost } = require("../controllers/authController");
+const { signUp, checkEmail, logIn, refreshToken, postUser, logOut, getUserDetails, userProfileDetails, userProfileAbout, uploadProfileImage, userToHost, addWishlist } = require("../controllers/authController");
 const { verifyJwtToken } = require("../middleware/jwt");
 const router = express.Router();
 
