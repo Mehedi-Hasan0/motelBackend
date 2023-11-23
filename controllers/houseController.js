@@ -493,7 +493,7 @@ exports.getAllListing = async (req, res) => {
         const data = await House.find({});
 
         const allListingData = data.filter((listing) => {
-            return listing.status === "Complete"
+            return listing.status === "Complete" && listing.photos.length !== 0
         })
         // console.log(allListingData.length)
         let response = {
